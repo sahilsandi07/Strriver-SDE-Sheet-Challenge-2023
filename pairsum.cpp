@@ -1,29 +1,95 @@
-#include <bits/stdc++.h>
+vector<vector<int>> pairSum(vector<int> &arr, int s)
+{
 
+   // Write your code here.
 
-vector<vector<int>> pairSum(vector<int> &arr, int s){
-   vector<vector<int>> pairs;
-   map<int,int> mp;
-   for(int n:arr){
-      mp[n]++;
-   }
+   sort(arr.begin(), arr.end());
 
+   vector<vector<int>> final;
 
-   map<int,int>::iterator itr=mp.begin();
-   while(itr!=mp.end()){
-      int val=itr->first;
-      if(s-val<0 || val>(s-val)){
-         break;
-      }
-      auto it=mp.find(s-val);
-      if(it!=mp.end()){
-         int count=val==it->first ? (itr->second*(itr->second-1))/2 : itr->second*it->second;
-         for(int i=0;i<count;i++){
-            pairs.push_back({val,it->first});
+   int low = 0, high = arr.size() - 1;
+
+   while (low < high)
+   {
+
+      if (arr[low] + arr[high] == s)
+      {
+
+         if (arr[low] != arr[high])
+         {
+
+            int x = arr[low], y = arr[high];
+
+            int j = low + 1, lc = 1, k = high - 1, hc = 1;
+
+            while (arr[j] == x)
+            {
+
+               lc++;
+
+               j++;
+            }
+
+            while (arr[k] == y)
+            {
+
+               hc++;
+
+               k--;
+            }
+
+            for (int l = 0; l < lc * hc; l++)
+            {
+
+               vector<int> v;
+
+               v.push_back(arr[low]);
+
+               v.push_back(arr[high]);
+
+               final.push_back(v);
+            }
+
+            low = j;
+
+            high = k;
+         }
+
+         else
+         {
+
+            int r = high - low + 1;
+
+            int c = (r * (r - 1)) / 2;
+
+            for (int l = 0; l < c; l++)
+            {
+
+               vector<int> v;
+
+               v.push_back(arr[low]);
+
+               v.push_back(arr[high]);
+
+               final.push_back(v);
+            }
+
+            return final;
          }
       }
-      itr++;
+
+      else if (arr[low] + arr[high] > s)
+      {
+
+         high--;
+      }
+
+      else
+      {
+
+         low++;
+      }
    }
-   
-   return pairs;
+
+   return final;
 }
